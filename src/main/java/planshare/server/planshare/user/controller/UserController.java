@@ -33,7 +33,7 @@ public class UserController {
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
-        params.add("client_id", "?");
+        params.add("client_id", "4e774caacc926325b709be7b30114be9");
         params.add("redirect_uri", "http://localhost:9090/login");
         params.add("code", code);
 
