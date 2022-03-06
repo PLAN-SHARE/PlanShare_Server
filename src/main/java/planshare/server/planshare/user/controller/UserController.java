@@ -16,8 +16,8 @@ public class UserController {
 
     // accessToken -> user 정보 받아서 jwt토큰 생성 후 반환
     @GetMapping("/user/login")
-    public String login(@RequestParam String token){
-        return userService.login(token);
+    public String login(@RequestParam String accessToken){
+        return userService.login(accessToken);
     }
 
     // code -> accessToken 반환
