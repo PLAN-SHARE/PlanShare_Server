@@ -1,22 +1,20 @@
 package planshare.server.planshare.repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import planshare.server.planshare.domain.Member;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Transactional
+@RequiredArgsConstructor
+@Repository
 public class JpaMemberRepository implements MemberRepository{
 
     private final EntityManager em;
-
-    @Autowired
-    public JpaMemberRepository(EntityManager em) {
-        this.em = em;
-    }
 
     @Override
     public Member save(Member member) {
@@ -35,7 +33,6 @@ public class JpaMemberRepository implements MemberRepository{
         List<Member> result = em.createQuery("select m from Member m where m.name = :name", Member.class)
                 .setParameter("name", name)
                 .getResultList();
-
         return result.stream().findAny();
     }
 

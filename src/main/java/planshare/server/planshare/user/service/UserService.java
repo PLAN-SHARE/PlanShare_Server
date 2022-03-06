@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import planshare.server.planshare.domain.Member;
+import planshare.server.planshare.repository.MemberRepository;
 import planshare.server.planshare.user.dto.KakaoUserInfo;
 import planshare.server.planshare.user.dto.TokenResponse;
 import planshare.server.planshare.util.JWTUtil;
@@ -18,6 +20,7 @@ import planshare.server.planshare.util.JWTUtil;
 @Service
 public class UserService {
 
+    private final MemberRepository memberRepository;
     private final JWTUtil jwtUtil;
 
     @Value("${client.id}")
