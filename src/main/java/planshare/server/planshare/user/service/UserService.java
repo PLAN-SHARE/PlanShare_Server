@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import planshare.server.planshare.domain.Member;
 import planshare.server.planshare.repository.MemberRepository;
-import planshare.server.planshare.security.JWTUtil;
 import planshare.server.planshare.user.dto.KakaoUserInfo;
 import planshare.server.planshare.user.dto.TokenResponse;
 
@@ -45,6 +45,12 @@ public class UserService {
 
         //jwt토큰 생성
         return jwtUtil.createJWT(resp.getBody().getId(), resp.getBody().getKakaoAccount().getEmail());
+    }
+
+    /* data insert */
+    public Long join(Member member) {
+        memberRepository.save(member);
+        return member.getId();
     }
 
     // code를 통해 accessToken 받음
