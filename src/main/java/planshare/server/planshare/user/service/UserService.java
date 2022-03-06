@@ -47,6 +47,12 @@ public class UserService {
         return jwtUtil.createJWT(resp.getBody().getId(), resp.getBody().getKakaoAccount().getEmail());
     }
 
+    /* data insert */
+    public Long join(Member member) {
+        memberRepository.save(member);
+        return member.getId();
+    }
+
     // code를 통해 accessToken 받음
     public String getAccessToken(String code) {
 
