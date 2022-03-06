@@ -12,7 +12,10 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import planshare.server.planshare.domain.Member;
 import planshare.server.planshare.repository.MemberRepository;
+import planshare.server.planshare.security.JWTUtil;
+import planshare.server.planshare.user.dto.JWTDTO;
 import planshare.server.planshare.user.dto.KakaoUserInfo;
+import planshare.server.planshare.user.dto.SignUpDTO;
 import planshare.server.planshare.user.dto.TokenResponse;
 
 
@@ -26,11 +29,8 @@ public class UserService {
     @Value("${client.id}")
     private String clientId;
 
-    public String login(String token) {
-
+    public JWTDTO login(String token) {
         HttpHeaders headers = new HttpHeaders();
-        //사용자 정보 가져오기
-        headers.clear();
         headers.add("Authorization", "Bearer " + token);
 
         HttpEntity<String> httpEntity = new HttpEntity<>(headers);
@@ -43,14 +43,24 @@ public class UserService {
                 KakaoUserInfo.class
         );
 
-        //jwt토큰 생성
-        return jwtUtil.createJWT(resp.getBody().getId(), resp.getBody().getKakaoAccount().getEmail());
+        // 유저정보가 DB에 없으면 JWT Null 반환
+        // 유저정보가 있으면 DB에 넣을필요없이 JWT 새로 발급
+        String email = resp.getBody().getKakaoAccount().getEmail();
+        Long kakaoId = resp.getBody().getId();
+
+        if (memberRepository.findByEmail(email).isPresent()) {
+            String jwt = jwtUtil.createJWT(resp.getBody().getId(), resp.getBody().getKakaoAccount().getEmail());
+            return new JWTDTO(kakaoId, email, jwt);
+        }
+
+        return new JWTDTO(kakaoId, email, null);
     }
 
-    /* data insert */
-    public Long join(Member member) {
+    public String saveMember(SignUpDTO signUpDTO) {
+        // DTO를 그대로 파라미터로 넣으면 의존성때문에 밑과 같이 분리해서 넣어주는게 좋습니다.
+        Member member = Member.createMember(signUpDTO.getKakaoId(), signUpDTO.getEmail(), signUpDTO.getNickName());
         memberRepository.save(member);
-        return member.getId();
+        return jwtUtil.createJWT(signUpDTO.getKakaoId(), signUpDTO.getEmail());
     }
 
     // code를 통해 accessToken 받음

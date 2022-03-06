@@ -1,4 +1,4 @@
-package planshare.server.planshare.util;
+package planshare.server.planshare.security;
 
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -23,7 +22,7 @@ public class JWTUtil {
     @Value("${jwt.secret}")
     private String key;
 
-    private final UserDetailsService userDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
 
     // key Base64로 인코딩
     @PostConstruct
@@ -46,8 +45,8 @@ public class JWTUtil {
     }
 
     // JWT 토큰에서 인증(유저) 정보 조회
-    public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getJwtId(token));
+    public Authentication getAuthentication(String accessToken) {
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(this.getJwtEmail(accessToken));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
