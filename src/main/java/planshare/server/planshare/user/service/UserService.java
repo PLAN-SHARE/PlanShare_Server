@@ -14,7 +14,7 @@ import planshare.server.planshare.domain.Member;
 import planshare.server.planshare.repository.MemberRepository;
 import planshare.server.planshare.user.dto.KakaoUserInfo;
 import planshare.server.planshare.user.dto.TokenResponse;
-import planshare.server.planshare.util.JWTUtil;
+
 
 @RequiredArgsConstructor
 @Service
