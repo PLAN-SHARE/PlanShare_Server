@@ -1,11 +1,13 @@
 package planshare.server.planshare.user.controller;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
+import planshare.server.planshare.user.dto.JWTDTO;
+import planshare.server.planshare.user.dto.SignUpDTO;
 import planshare.server.planshare.user.service.UserService;
 
 @RestController
@@ -14,23 +16,30 @@ public class UserController {
 
     private final UserService userService;
 
-    // accessToken -> user 정보 받아서 jwt토큰 생성 후 반환
+
+    @ApiOperation(value = "카카오 로그인", notes = "accessToken -> user 정보 받아서 jwt토큰 생성 후 반환 없으면 Null")
     @GetMapping("/user/login")
-    public String login(@RequestParam String accessToken){
+    public JWTDTO login(@RequestParam String accessToken) {
         return userService.login(accessToken);
     }
 
-    // code -> accessToken 반환
+    @ApiOperation(value = "인가코드를 넣으면 accessToken을 반환하는 API", notes = "인가코드를 넣으면 accessToken 반환")
     @GetMapping("/test/code")
     public String getAccessToken(@RequestParam String code) {
-        String jwtToken = userService.getAccessToken(code);
-        return jwtToken;
+        return userService.getAccessToken(code);
     }
 
     @GetMapping("/checkJWT")
-    public String list() {
-        //권한체크
-        Authentication user = SecurityContextHolder.getContext().getAuthentication();
-        return (String) user.getPrincipal();
+    public UserDetails list() {
+        //현재 로그인 되어있는 사람이 넘겨준 JWT에 어떠한 내용이 담겨져있는지 확인하는 컨트롤러
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        return userDetails;
+    }
+
+    @ApiOperation(value = "회원가입 API", notes = "닉네임,카카오ID,email을 주면 회원가입")
+    @PostMapping("/user/signup")
+    public String singUp(@RequestBody SignUpDTO signUpDto) {
+        return userService.saveMember(signUpDto);
     }
 }
