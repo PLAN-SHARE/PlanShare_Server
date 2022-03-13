@@ -12,6 +12,7 @@ public class Friend {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "f_id")
     private Long id;
 
     @ManyToOne
