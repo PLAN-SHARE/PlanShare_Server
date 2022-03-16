@@ -22,11 +22,14 @@ public class GoalService {
     /**
      * goal store
      */
-    public Long addGoal(CustomUserDetailsVO cud, GoalForm form){
+    public Long addGoal(CustomUserDetailsVO userDetailsVO, GoalForm form){
 
-        Optional<Member> member = memberRepository.findByEmail(cud.getUsername());
+        Optional<Member> member = memberRepository.findByEmail(userDetailsVO.getUsername());
+
         Goal goal = Goal.createGoal(form.getName(), member.get());
 
+        System.out.println("service : "+member);
+        System.out.println("service : "+goal);
         goalRepository.save(goal);
 
         return goal.getId();
@@ -42,7 +45,7 @@ public class GoalService {
     /**
      * 한 member의 goals 전체 조회
      */
-    public List<Goal> searchGoalsOfMember(CustomUserDetailsVO cud){
+    public List<Goal> findGoalsOfMember(CustomUserDetailsVO cud){
         Optional<Member> member = memberRepository.findByEmail(cud.getUsername());
 
         return goalRepository.findByMember(member.get());
@@ -51,7 +54,7 @@ public class GoalService {
     /**
      * 한 member의 goal 이름 조회
      */
-    public List<Goal> searchGoalNameOfMember(CustomUserDetailsVO cud, String name){
+    public List<Goal> findGoalsOfMemberAndName(CustomUserDetailsVO cud, String name){
         Optional<Member> member = memberRepository.findByEmail(cud.getUsername());
 
         return goalRepository.findByMemberAndName(member.get(), name);
@@ -60,7 +63,8 @@ public class GoalService {
     /**
      * goal check by name
      */
-    public List<Goal> searchGoalName(String name){
+    public List<Goal> findGoalsOfName(String name){
+
         return goalRepository.findByName(name);
     }
 

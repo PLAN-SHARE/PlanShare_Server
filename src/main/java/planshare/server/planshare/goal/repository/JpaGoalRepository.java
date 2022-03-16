@@ -19,6 +19,7 @@ public class JpaGoalRepository implements GoalRepository {
 
     @Override
     public Goal save(Goal goal) {
+        System.out.println("repo : "+goal);
         em.persist(goal);
         return goal;
     }

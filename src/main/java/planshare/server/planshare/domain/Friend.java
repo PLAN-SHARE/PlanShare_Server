@@ -12,7 +12,6 @@ public class Friend {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "f_id")
     private Long id;
 
     @ManyToOne
@@ -22,5 +21,18 @@ public class Friend {
     @ManyToOne
     @JoinColumn(name = "to_id")
     private Member toMember;
+
+    // false: 친구 요청 상태
+    // true: 친구 맺어진 상태
+    private Boolean status;
+
+    public static Friend createFriend(Member fromMember, Member toMember, Boolean status) {
+        Friend friend = new Friend();
+        friend.fromMember = fromMember;
+        friend.toMember = toMember;
+        friend.status = status;
+
+        return friend;
+    }
 
 }
