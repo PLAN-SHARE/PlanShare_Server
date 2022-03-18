@@ -7,6 +7,7 @@ import planshare.server.planshare.domain.Goal;
 import planshare.server.planshare.domain.Member;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +21,13 @@ public class JpaGoalRepository implements GoalRepository {
     @Override
     public Goal save(Goal goal) {
         System.out.println("repo : "+goal);
-        em.persist(goal);
+        if (goal.getId() == null) {
+            System.out.println("repo : create : persist : ");
+            em.persist(goal);
+        } else {
+            System.out.println("repo : update : merge : ");
+            em.merge(goal);
+        }
         return goal;
     }
 
@@ -57,4 +64,14 @@ public class JpaGoalRepository implements GoalRepository {
         return em.createQuery("select g from Goal g", Goal.class)
                 .getResultList();
     }
+
+    @Override
+    public int deleteById(long goalId) {
+        Query query = em.createQuery("delete from Goal g where g.id = :goalId")
+                .setParameter("goalId",goalId);
+        int rows = query.executeUpdate();
+        return rows;
+    }
+
+
 }

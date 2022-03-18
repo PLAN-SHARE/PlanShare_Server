@@ -14,5 +14,5 @@ public interface GoalRepository {
     List<Goal> findByMember(Member member);
     List<Goal> findByMemberAndName(Member member, String name);
     List<Goal> findAll();
-
+    int deleteById(long goalId);
 }

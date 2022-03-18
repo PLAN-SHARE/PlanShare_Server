@@ -22,17 +22,16 @@ public class GoalService {
     /**
      * goal store
      */
-    public Long addGoal(CustomUserDetailsVO userDetailsVO, GoalForm form){
+    public Goal addGoal(CustomUserDetailsVO cud, GoalForm form){
 
-        Optional<Member> member = memberRepository.findByEmail(userDetailsVO.getUsername());
+        Optional<Member> member = memberRepository.findByEmail(cud.getUsername());
 
         Goal goal = Goal.createGoal(form.getName(), member.get());
 
         System.out.println("service : "+member);
         System.out.println("service : "+goal);
-        goalRepository.save(goal);
 
-        return goal.getId();
+        return goalRepository.save(goal);
     }
 
     /**
@@ -66,6 +65,41 @@ public class GoalService {
     public List<Goal> findGoalsOfName(String name){
 
         return goalRepository.findByName(name);
+    }
+
+    /**
+     * goal check by id
+     */
+    public Optional<Goal> findGoalOfId(CustomUserDetailsVO cud, Long goalId){
+
+        return goalRepository.findById(goalId);
+    }
+
+    /**
+     * goal name update
+     */
+    public Goal updateGoalName(CustomUserDetailsVO cud, Long goalId, String name){
+
+        Optional<Member> member = memberRepository.findByEmail(cud.getUsername());
+        Goal goal = goalRepository.findById(goalId).get();
+
+        if(member.get().getId() == goal.getMember().getId()){
+            goal.modifyName(name);
+        }
+
+        return goalRepository.save(goal);
+    }
+
+    public int deleteGoal(CustomUserDetailsVO cud, Long goalId){
+
+        int rows = 0;
+        Optional<Member> member = memberRepository.findByEmail(cud.getUsername());
+        Goal goal = goalRepository.findById(goalId).get();
+
+        if(member.get().getId() == goal.getMember().getId()){
+            rows = goalRepository.deleteById(goalId);
+        }
+        return rows;
     }
 
 

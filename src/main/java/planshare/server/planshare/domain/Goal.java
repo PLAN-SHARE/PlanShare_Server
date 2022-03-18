@@ -29,4 +29,8 @@ public class Goal {
         return goal;
     }
 
+    public void modifyName(String name){
+        this.name = name;
+    }
+
 }
