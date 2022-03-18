@@ -9,6 +9,7 @@ import planshare.server.planshare.goal.service.GoalService;
 import planshare.server.planshare.user.dto.CustomUserDetailsVO;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -25,15 +26,23 @@ public class GoalController {
         return goalService.addGoal(userDetailsVO,goalForm);
     }
 
+    // goal by id
+    @GetMapping("/read/{goalId}")
+    public Optional<Goal> readGoal(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
+                                  @PathVariable(name = "goalId") Long id){
+        return goalService.findGoalOfId(userDetailsVO, id);
+    }
+
+
     // goal of member
-    @GetMapping("/read_member")
+    @GetMapping("/read/member")
     public List<Goal> listOfMember(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO){
 
         return goalService.findGoalsOfMember(userDetailsVO);
     }
 
     // goal of member and name
-    @GetMapping("/read_member_name")
+    @GetMapping("/read/member-name")
     public List<Goal> listOfMemberAndName(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
                                           @RequestParam String name){
 
@@ -41,20 +50,21 @@ public class GoalController {
     }
 
     // goals
-    @GetMapping("/read_alluser")
+    @GetMapping("/read/alluser")
     public List<Goal> listOfGoals(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO){
 
         return goalService.findGoals();
     }
 
     // goal of name
-    @GetMapping("/read_alluser_name")
+    @GetMapping("/read/alluser-name")
     public List<Goal> listOfName(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
                                  @RequestParam String name){
 
         return goalService.findGoalsOfName(name);
     }
 
+    // goal update
     @PutMapping("/update/{goalId}")
     public Goal modifyName(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
                            @RequestBody GoalForm goalForm,
@@ -62,6 +72,7 @@ public class GoalController {
         return goalService.updateGoalName(userDetailsVO, id, goalForm.getName());
     }
 
+    // goal delete
     @DeleteMapping("/delete/{goalId}")
     public int deleteGoal(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
                           @PathVariable(name = "goalId") Long id){
