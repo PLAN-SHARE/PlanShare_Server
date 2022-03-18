@@ -1,5 +1,6 @@
 package planshare.server.planshare.user.dto;
 
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import planshare.server.planshare.domain.Member;
