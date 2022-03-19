@@ -33,43 +33,42 @@ public class GoalController {
         return goalService.findGoalOfId(userDetailsVO, id);
     }
 
-
-    // goal of member
-    @GetMapping("/read/member")
-    public List<Goal> listOfMember(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO){
-
-        return goalService.findGoalsOfMember(userDetailsVO);
-    }
-
     // goal of member and name
-    @GetMapping("/read/member-name")
-    public List<Goal> listOfMemberAndName(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
-                                          @RequestParam String name){
-
-        return goalService.findGoalsOfMemberAndName(userDetailsVO, name);
+    @GetMapping("/read/myself")
+    public List<Goal> listOfMyselfAndName(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
+                                          @RequestParam(required = false) String name){
+        if(name == null){
+            return goalService.findMyGoals(userDetailsVO);
+        }
+        return goalService.findMyGoalsOfName(userDetailsVO, name);
     }
 
-    // goals
-    @GetMapping("/read/alluser")
-    public List<Goal> listOfGoals(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO){
-
-        return goalService.findGoals();
+    @GetMapping("/read/member/{memberId}")
+    public List<Goal> listOfMember(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
+                                   @RequestParam(required = false) String name,
+                                   @PathVariable(name = "memberId") Long memberId){
+        if(name == null){
+            return goalService.findGoalsOfMember(memberId);
+        }
+        return goalService.findGoalsOfMemberAndName(memberId, name);
     }
 
     // goal of name
-    @GetMapping("/read/alluser-name")
+    @GetMapping("/read/alluser")
     public List<Goal> listOfName(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
-                                 @RequestParam String name){
-
+                                 @RequestParam(required = false) String name){
+        if(name == null){
+            return goalService.findGoals();
+        }
         return goalService.findGoalsOfName(name);
     }
 
     // goal update
     @PutMapping("/update/{goalId}")
-    public Goal modifyName(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
+    public Goal modifyGoal(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
                            @RequestBody GoalForm goalForm,
                            @PathVariable(name = "goalId") Long id){
-        return goalService.updateGoalName(userDetailsVO, id, goalForm.getName());
+        return goalService.updateGoalName(userDetailsVO, id, goalForm);
     }
 
     // goal delete
