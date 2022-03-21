@@ -22,4 +22,11 @@ public class Friend {
     @JoinColumn(name = "to_id")
     private Member toMember;
 
+    public static Friend createFriend(Member fromMember, Member toMember) {
+        Friend friend = new Friend();
+        friend.fromMember = fromMember;
+        friend.toMember = toMember;
+
+        return friend;
+    }
 }
