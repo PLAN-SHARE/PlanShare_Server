@@ -11,10 +11,14 @@ import javax.persistence.*;
 public class Member {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "m_id")
     private Long id;
+
     private Long kakaoId;
+
     private String email;
+
     private String nickName;
 
     // set메소드는 절대로 쓰면 안됩니다... 실제로 이렇게 파라미터로 넘겨서 수정하거나 만들도록 변경해야합니다.

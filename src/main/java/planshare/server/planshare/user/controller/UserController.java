@@ -3,9 +3,11 @@ package planshare.server.planshare.user.controller;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import planshare.server.planshare.user.dto.CustomUserDetailsVO;
 import planshare.server.planshare.user.dto.JWTDTO;
 import planshare.server.planshare.user.dto.SignUpDTO;
 import planshare.server.planshare.user.service.UserService;
@@ -30,11 +32,12 @@ public class UserController {
     }
 
     @GetMapping("/checkJWT")
-    public UserDetails list() {
+    public UserDetails list(@AuthenticationPrincipal CustomUserDetailsVO cud) {
         //현재 로그인 되어있는 사람이 넘겨준 JWT에 어떠한 내용이 담겨져있는지 확인하는 컨트롤러
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+/*        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserDetails userDetails = (UserDetails) principal;
-        return userDetails;
+        return userDetails;*/
+        return cud;
     }
 
     @ApiOperation(value = "회원가입 API", notes = "닉네임,카카오ID,email을 주면 회원가입")

@@ -21,9 +21,9 @@ public class MemberRepositoryTest {
 //        Member member = new Member();
 //        member.setId(3l);
 //        member.setEmail("email3");
-////        member.setName("hoseong3");
+//        member.setName("hoseong3");
 //
-////        Long saveId = userService.join(member);
+//        Long saveId = userService.join(member);
 //        System.out.println(saveId);
 //        System.out.println(member);
 //
