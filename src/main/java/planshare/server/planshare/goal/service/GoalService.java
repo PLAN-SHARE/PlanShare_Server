@@ -58,7 +58,11 @@ public class GoalService {
     public List<Goal> findGoalsOfMember(Long memberId){
         Optional<Member> member = memberRepository.findById(memberId);
 
-        return goalRepository.findByMember(member.get());
+        if(member.isPresent()) {
+            return goalRepository.findByMember(member.get());
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -67,7 +71,11 @@ public class GoalService {
     public List<Goal> findGoalsOfMemberAndName(Long memberId, String name){
         Optional<Member> member = memberRepository.findById(memberId);
 
-        return goalRepository.findByMemberAndName(member.get(), name);
+        if(member.isPresent()) {
+            return goalRepository.findByMemberAndName(member.get(), name);
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -99,13 +107,17 @@ public class GoalService {
     public Goal updateGoalName(CustomUserDetailsVO cud, Long goalId, GoalForm goalForm){
 
         Optional<Member> member = memberRepository.findByEmail(cud.getUsername());
-        Goal goal = goalRepository.findById(goalId).get();
+        Optional<Goal> goal = goalRepository.findById(goalId);
 
-        if(member.get().getId() == goal.getMember().getId()){
-            goal.modifyGoal(goalForm.getName(), goalForm.getColor(), goalForm.getIcon(), goalForm.isVisibility());
+        if(goal.isPresent() && member.get().getId() == goal.get().getMember().getId()){
+            goal.get().modifyGoal(goalForm.getName(), goalForm.getColor(), goalForm.getIcon(), goalForm.isVisibility());
+
+            return goalRepository.save(goal.get());
+        } else {
+            return null;
         }
 
-        return goalRepository.save(goal);
+
     }
 
     /**
@@ -115,9 +127,9 @@ public class GoalService {
 
         int rows = 0;
         Optional<Member> member = memberRepository.findByEmail(cud.getUsername());
-        Goal goal = goalRepository.findById(goalId).get();
+        Optional<Goal> goal = goalRepository.findById(goalId);
 
-        if(member.get().getId() == goal.getMember().getId()){
+        if(goal.isPresent() && member.get().getId() == goal.get().getMember().getId()){
             rows = goalRepository.deleteById(goalId);
         }
         return rows;
