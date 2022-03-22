@@ -14,7 +14,7 @@ public class GoalForm {
 
     private String color;
 
-    private int iconNumber;
+    private String icon;
 
     private boolean visibility;
 
