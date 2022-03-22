@@ -10,7 +10,6 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonNaming(value = PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class Goal {
 
     @Id
@@ -23,7 +22,7 @@ public class Goal {
     // HEX COLOR CODE;
     private String color;
 
-    private int iconNumber;
+    private String icon;
 
     // 공개 여부
     private boolean visibility;
@@ -32,11 +31,11 @@ public class Goal {
     @JoinColumn(name = "m_id")
     private Member member;
 
-    public static Goal createGoal(String name, String color, int iconNumber, boolean visibility, Member member){
+    public static Goal createGoal(String name, String color, String icon, boolean visibility, Member member){
         Goal goal = new Goal();
         goal.name = name;
         goal.color = color;
-        goal.iconNumber = iconNumber;
+        goal.icon = icon;
         goal.visibility = visibility;
         goal.member = member;
 
@@ -47,10 +46,10 @@ public class Goal {
         this.name = name;
     }
 
-    public void modifyGoal(String name, String color, int iconNumber, boolean visibility){
+    public void modifyGoal(String name, String color, String icon, boolean visibility){
         this.name = name;
         this.color = color;
-        this.iconNumber =iconNumber;
+        this.icon = icon;
         this.visibility = visibility;
     }
 }

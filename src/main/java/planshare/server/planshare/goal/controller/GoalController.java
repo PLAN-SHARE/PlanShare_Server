@@ -28,7 +28,7 @@ public class GoalController {
 
     // goal by id
     @GetMapping("/read/{goalId}")
-    public Optional<Goal> readGoal(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
+    public Optional<Goal> readGoalById(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
                                   @PathVariable(name = "goalId") Long id){
         return goalService.findGoalOfId(userDetailsVO, id);
     }
@@ -44,7 +44,7 @@ public class GoalController {
     }
 
     @GetMapping("/read/member/{memberId}")
-    public List<Goal> listOfMember(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
+    public List<Goal> listOfMemberAndName(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
                                    @RequestParam(required = false) String name,
                                    @PathVariable(name = "memberId") Long memberId){
         if(name == null){
@@ -77,8 +77,5 @@ public class GoalController {
                           @PathVariable(name = "goalId") Long id){
         return goalService.deleteGoal(userDetailsVO, id);
     }
-
-
-
 
 }

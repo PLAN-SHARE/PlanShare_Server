@@ -26,7 +26,7 @@ public class GoalService {
 
         Optional<Member> member = memberRepository.findByEmail(cud.getUsername());
 
-        Goal goal = Goal.createGoal(form.getName(), form.getColor(), form.getIconNumber(), form.isVisibility(), member.get());
+        Goal goal = Goal.createGoal(form.getName(), form.getColor(), form.getIcon(), form.isVisibility(), member.get());
 
         System.out.println("service : "+member);
         System.out.println("service : "+goal);
@@ -102,7 +102,7 @@ public class GoalService {
         Goal goal = goalRepository.findById(goalId).get();
 
         if(member.get().getId() == goal.getMember().getId()){
-            goal.modifyGoal(goalForm.getName(), goalForm.getColor(), goalForm.getIconNumber(), goalForm.isVisibility());
+            goal.modifyGoal(goalForm.getName(), goalForm.getColor(), goalForm.getIcon(), goalForm.isVisibility());
         }
 
         return goalRepository.save(goal);
@@ -122,6 +122,5 @@ public class GoalService {
         }
         return rows;
     }
-
 
 }

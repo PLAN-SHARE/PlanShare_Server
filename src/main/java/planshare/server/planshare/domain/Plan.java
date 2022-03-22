@@ -22,6 +22,9 @@ public class Plan {
 
     private LocalDateTime end;
 
+    // 체크 여부
+    private boolean checkStatus;
+
     @ManyToOne
     @JoinColumn(name = "g_id")
     private Goal goal;
