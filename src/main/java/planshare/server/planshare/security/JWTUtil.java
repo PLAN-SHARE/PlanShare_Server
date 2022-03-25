@@ -37,7 +37,7 @@ public class JWTUtil {
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setIssuedAt(now) // 발급시간
-                .setExpiration(new Date(now.getTime() + Duration.ofMinutes(30).toMillis())) // 만료시간
+                .setExpiration(new Date(now.getTime() + Duration.ofMinutes(60).toMillis())) // 만료시간
                 .claim("id", id)
                 .claim("email", email)
                 .signWith(SignatureAlgorithm.HS256, key)
