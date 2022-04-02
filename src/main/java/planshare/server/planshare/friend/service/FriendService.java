@@ -33,10 +33,10 @@ public class FriendService {
 
         // 팔로우한 경우
         if (follow.isPresent()) {
-            return new ProfileDTO(toMember.get().getEmail(), toMember.get().getNickName(), true);
+            return new ProfileDTO(toMember.get(), true);
         }
         // 팔로우 아직 안한 경우
-        return new ProfileDTO(toMember.get().getEmail(), toMember.get().getNickName(), false);
+        return new ProfileDTO(toMember.get(), false);
     }
 
     // 친구 follow 함
@@ -48,7 +48,7 @@ public class FriendService {
         Friend friend = Friend.createFriend(fromMember.get(), toMember.get());
         friendRepository.save(friend);
 
-        return new ProfileDTO(toMember.get().getEmail(), toMember.get().getNickName(), true);
+        return new ProfileDTO(toMember.get(), true);
     }
 
     // 친구 unfollow 함
@@ -63,7 +63,7 @@ public class FriendService {
         }
         friendRepository.delete(follow.get());
 
-        return new ProfileDTO(toMember.get().getEmail(), toMember.get().getNickName(), false);
+        return new ProfileDTO(toMember.get(), false);
     }
 
     // 내 follow 목록
