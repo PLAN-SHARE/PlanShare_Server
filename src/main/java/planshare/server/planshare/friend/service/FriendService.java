@@ -66,15 +66,15 @@ public class FriendService {
         return new ProfileDTO(toMember.get(), false);
     }
 
-    // 내 follow 목록
-    public List<Member> findFollow(CustomUserDetailsVO userDetails) {
+    // 내가 팔로우 하고 있는 사람 목록
+    public List<Member> findFollowing(CustomUserDetailsVO userDetails) {
 
         Optional<Member> member = memberRepository.findByEmail(userDetails.getUsername());
         return friendRepository.findByFromMember(member.get());
     }
 
-    // 내 following 목록
-    public List<Member> findFollowing(CustomUserDetailsVO userDetails) {
+    // 나를 팔로우 하고 있는 사람 목록
+    public List<Member> findFollower(CustomUserDetailsVO userDetails) {
 
         Optional<Member> member = memberRepository.findByEmail(userDetails.getUsername());
         return friendRepository.findByToMember(member.get());
