@@ -3,7 +3,7 @@ package planshare.server.planshare.domain;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -18,9 +18,7 @@ public class Plan {
 
     private String name;
 
-    private LocalDateTime start;
-
-    private LocalDateTime end;
+    private LocalDate date;
 
     // 체크 여부
     private boolean checkStatus;
