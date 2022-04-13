@@ -14,13 +14,12 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/goal")
 public class GoalController {
 
     private final GoalService goalService;
 
     @ApiOperation(value = "goal 생성 API", notes = "생성한 goal 객체 반환")
-    @PostMapping("/create")
+    @PostMapping("/goals")
     public Goal create(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
                        @RequestBody GoalForm goalForm){
 
@@ -30,7 +29,7 @@ public class GoalController {
 
     // goal by id
     @ApiOperation(value = "goal 하나 조회(by goalId) API", notes = "찾은 goal 객체 반환")
-    @GetMapping("/read/{goalId}")
+    @GetMapping("/goals/{goalId}")
     public Optional<Goal> readGoalById(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
                                   @PathVariable(name = "goalId") Long id){
         return goalService.findGoalOfId(userDetailsVO, id);
@@ -38,7 +37,7 @@ public class GoalController {
 
     // goal of member and name
     @ApiOperation(value = "나의 goal 목록 조회 API", notes = "name 파라미터 추가시(필수x) 해당 이름의 goal 리스트 반환")
-    @GetMapping("/read/myself")
+    @GetMapping("/goals/my-goals")
     public List<Goal> listOfMyselfAndName(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
                                           @RequestParam(required = false) String name){
         if(name == null){
@@ -48,7 +47,7 @@ public class GoalController {
     }
 
     @ApiOperation(value = "특정 멤버의 goal 목록 조회 API", notes = "name 파라미터 추가시(필수x) 해당 이름의 goal 리스트 반환")
-    @GetMapping("/read/member/{memberId}")
+    @GetMapping("/goals/members/{memberId}")
     public List<Goal> listOfMemberAndName(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
                                    @RequestParam(required = false) String name,
                                    @PathVariable(name = "memberId") Long memberId){
@@ -60,7 +59,7 @@ public class GoalController {
 
     // goal of name
     @ApiOperation(value = "모든 멤버의 goal 목록 조회 API", notes = "name 파라미터 추가시(필수x) 해당 이름의 goal 리스트 반환")
-    @GetMapping("/read/alluser")
+    @GetMapping("/goals")
     public List<Goal> listOfName(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
                                  @RequestParam(required = false) String name){
         if(name == null){
@@ -71,7 +70,7 @@ public class GoalController {
 
     // goal update
     @ApiOperation(value = "특정 goal 내용 수정 API", notes = "수정한 goal 객체 반환")
-    @PutMapping("/update/{goalId}")
+    @PutMapping("/goals/{goalId}")
     public Goal modifyGoal(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
                            @RequestBody GoalForm goalForm,
                            @PathVariable(name = "goalId") Long id){
@@ -80,7 +79,7 @@ public class GoalController {
 
     // goal delete
     @ApiOperation(value = "특정 goal 삭제 API", notes = "삭제 성공시 정수 1 반환 / 실패시 0 반환")
-    @DeleteMapping("/delete/{goalId}")
+    @DeleteMapping("/goals/{goalId}")
     public int deleteGoal(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
                           @PathVariable(name = "goalId") Long id){
         return goalService.deleteGoal(userDetailsVO, id);
