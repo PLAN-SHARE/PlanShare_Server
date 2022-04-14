@@ -1,6 +1,7 @@
 package planshare.server.planshare.domain;
 
 import lombok.*;
+import org.springframework.security.core.parameters.P;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -26,5 +27,23 @@ public class Plan {
     @ManyToOne
     @JoinColumn(name = "g_id")
     private Goal goal;
+
+    public static Plan createPlan(String name, LocalDate date, boolean checkStatus, Goal goal){
+        Plan plan = new Plan();
+        plan.name = name;
+        plan.date = date;
+        plan.checkStatus = checkStatus;
+        plan.goal = goal;
+
+        return plan;
+    }
+
+    public void modifyName(String name){
+        this.name = name;
+    }
+
+    public void modifyCheck(boolean checkStatus){
+        this.checkStatus = checkStatus;
+    }
 
 }
