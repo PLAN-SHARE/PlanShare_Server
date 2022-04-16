@@ -1,9 +1,10 @@
 package planshare.server.planshare.domain;
 
 import lombok.*;
+import org.springframework.security.core.parameters.P;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -18,9 +19,7 @@ public class Plan {
 
     private String name;
 
-    private LocalDateTime start;
-
-    private LocalDateTime end;
+    private LocalDate date;
 
     // 체크 여부
     private boolean checkStatus;
@@ -28,5 +27,23 @@ public class Plan {
     @ManyToOne
     @JoinColumn(name = "g_id")
     private Goal goal;
+
+    public static Plan createPlan(String name, LocalDate date, boolean checkStatus, Goal goal){
+        Plan plan = new Plan();
+        plan.name = name;
+        plan.date = date;
+        plan.checkStatus = checkStatus;
+        plan.goal = goal;
+
+        return plan;
+    }
+
+    public void modifyName(String name){
+        this.name = name;
+    }
+
+    public void modifyCheck(boolean checkStatus){
+        this.checkStatus = checkStatus;
+    }
 
 }
