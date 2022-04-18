@@ -34,14 +34,14 @@ public class PlanController {
     public Optional<Plan> readPlanByPlanId(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
                                            @PathVariable(name = "goalId") Long goalId,
                                            @PathVariable(name = "planId") Long planId){
-        return planService.findPlanOfId(goalId, planId);
+        return planService.findPlanOfId(userDetailsVO, goalId, planId);
     }
 
     @ApiOperation(value = "해당 goal에 속한 plan 목록 조회 API", notes = "plan 리스트 반환")
     @GetMapping("/goals/{goalId}/plans")
     public List<Plan> readPlansByGoal(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
                                       @PathVariable(name = "goalId") Long goalId){
-        return planService.findPlansOfGoal(goalId);
+        return planService.findPlansOfGoal(userDetailsVO, goalId);
     }
 
     @ApiOperation(value = "특정 plan 이름 수정 API", notes = "수정한 plan 객체 반환")

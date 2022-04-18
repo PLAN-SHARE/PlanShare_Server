@@ -44,10 +44,15 @@ public class PlanService {
     /**
      * select plan by planId
      */
-    public Optional<Plan> findPlanOfId(Long goalId, Long planId){
+    public Optional<Plan> findPlanOfId(CustomUserDetailsVO userDetailsVO, Long goalId, Long planId){
 
         Optional<Plan> plan = planRepository.findById(planId);
-        if (plan.get().getGoal().getId() == goalId){
+        Optional<Goal> goal = goalRepository.findById(goalId);
+        Optional<Member> member = memberRepository.findByEmail(userDetailsVO.getUsername());
+
+        if (plan.get().getGoal().getId() == goalId && goal.get().isVisibility()){   // 전체 공개 경우
+            return plan;
+        } else if (member.get().getId() == goal.get().getMember().getId()){         // 나만 보기 경우
             return plan;
         } else {
             return null;
@@ -57,11 +62,17 @@ public class PlanService {
     /**
      * select plan list by goalId
      */
-    public List<Plan> findPlansOfGoal(Long goalId){
+    public List<Plan> findPlansOfGoal(CustomUserDetailsVO userDetailsVO, Long goalId){
 
         Optional<Goal> goal = goalRepository.findById(goalId);
+        Optional<Member> member = memberRepository.findByEmail(userDetailsVO.getUsername());
+
         if(goal.isPresent()){
-            return planRepository.findByGoal(goal.get());
+            if(goal.get().isVisibility() || member.get().getId() == goal.get().getMember().getId()){
+                return planRepository.findByGoal(goal.get());
+            } else {
+                return null;
+            }
         } else {
             return null;
         }
