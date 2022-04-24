@@ -5,6 +5,7 @@ import org.springframework.security.core.parameters.P;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -19,7 +20,7 @@ public class Plan {
 
     private String name;
 
-    private LocalDate date;
+    private LocalDateTime date;
 
     // 체크 여부
     private boolean checkStatus;
@@ -28,7 +29,7 @@ public class Plan {
     @JoinColumn(name = "g_id")
     private Goal goal;
 
-    public static Plan createPlan(String name, LocalDate date, boolean checkStatus, Goal goal){
+    public static Plan createPlan(String name, LocalDateTime date, boolean checkStatus, Goal goal){
         Plan plan = new Plan();
         plan.name = name;
         plan.date = date;

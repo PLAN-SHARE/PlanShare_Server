@@ -9,6 +9,7 @@ import planshare.server.planshare.domain.Plan;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +46,7 @@ public class JpaPlanRepository implements PlanRepository{
     }
 
     @Override
-    public List<Plan> findByDate(LocalDate date) {
+    public List<Plan> findByDate(LocalDateTime date) {
         return em.createQuery("select p from Plan p where p.date = :planDate", Plan.class)
                 .setParameter("planDate", date)
                 .getResultList();
