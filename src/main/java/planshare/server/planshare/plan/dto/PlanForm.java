@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -14,6 +15,6 @@ public class PlanForm {
 
     private String name;
 
-    private LocalDate date;
+    private LocalDateTime date;
 
 }
