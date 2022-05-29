@@ -1,17 +1,19 @@
 package planshare.server.planshare.plan.controller;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import planshare.server.planshare.domain.Plan;
+import planshare.server.planshare.plan.dto.PlanEx;
 import planshare.server.planshare.plan.dto.PlanForm;
 import planshare.server.planshare.plan.dto.PlanName;
 import planshare.server.planshare.plan.service.PlanService;
 import planshare.server.planshare.user.dto.CustomUserDetailsVO;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -42,6 +44,15 @@ public class PlanController {
     public List<Plan> readPlansByGoal(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
                                       @PathVariable(name = "goalId") Long goalId){
         return planService.findPlansOfGoal(userDetailsVO, goalId);
+    }
+
+    @ApiOperation(value = "해당 goal에 속하고 months에 해당하는 달의 plan 목록 조회 API", notes = "일별로 정렬한 plan 리스트 반환")
+    @GetMapping("/users/{memberId}/goals/plans/years/{year}/months/{month}")
+    public Map<String, List<PlanEx>> readPlanByDate(@AuthenticationPrincipal CustomUserDetailsVO userDetailsVO,
+                                                       @PathVariable(name = "memberId") Long memberId,
+                                                       @PathVariable(name = "year") int year,
+                                                       @PathVariable(name = "month") int month){
+        return planService.findPlanByDate(userDetailsVO, memberId, year, month);
     }
 
     @ApiOperation(value = "특정 plan 이름 수정 API", notes = "수정한 plan 객체 반환")

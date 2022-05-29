@@ -46,9 +46,10 @@ public class JpaPlanRepository implements PlanRepository{
     }
 
     @Override
-    public List<Plan> findByDate(LocalDateTime date) {
-        return em.createQuery("select p from Plan p where p.date = :planDate", Plan.class)
-                .setParameter("planDate", date)
+    public List<Plan> findByDate(int year, int month) {
+        return em.createQuery("select p from Plan p where FUNCTION('YEAR', p.date) = :planYear and FUNCTION('MONTH', p.date) = :planMonth", Plan.class)
+                .setParameter("planYear", year)
+                .setParameter("planMonth", month)
                 .getResultList();
     }
 

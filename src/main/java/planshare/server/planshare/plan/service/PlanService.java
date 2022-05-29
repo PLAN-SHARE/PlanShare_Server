@@ -6,13 +6,15 @@ import planshare.server.planshare.domain.Goal;
 import planshare.server.planshare.domain.Member;
 import planshare.server.planshare.domain.Plan;
 import planshare.server.planshare.goal.repository.GoalRepository;
+import planshare.server.planshare.plan.dto.PlanEx;
 import planshare.server.planshare.plan.dto.PlanForm;
 import planshare.server.planshare.plan.repository.PlanRepository;
 import planshare.server.planshare.repository.MemberRepository;
 import planshare.server.planshare.user.dto.CustomUserDetailsVO;
 
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -76,6 +78,40 @@ public class PlanService {
         } else {
             return null;
         }
+    }
+
+    /**
+     * select plan list by date
+     * 일별로 묶어서 반환
+     */
+    public Map<String, List<PlanEx>> findPlanByDate(CustomUserDetailsVO userDetailsVO, Long memberId, int year, int month){
+
+        Optional<Member> user = memberRepository.findByEmail(userDetailsVO.getUsername());  // 요청한 사용자
+        Optional<Member> member = memberRepository.findById(memberId);                      // 요청된 멤버
+        List<Goal> goalList = goalRepository.findByMember(member.get());
+
+        Map<String, List<PlanEx>> planDate = new HashMap<>();
+        List<Plan> planList = new ArrayList<>();
+
+        for (Goal goal : goalList){
+            if(goal.isVisibility() || user.get().getId() == goal.getMember().getId()){
+                planList.addAll(planRepository.findByGoal(goal));
+            }
+        }
+        for (Plan plan : planList){
+            LocalDate localDate = plan.getDate().toLocalDate();
+            if (localDate.getYear() == year && localDate.getMonthValue() == month){
+                String convertedDate = localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+                List<PlanEx> planExes = new ArrayList<>();
+                List<PlanEx> planExList = planDate.getOrDefault(convertedDate, planExes);
+
+                PlanEx planEx = PlanEx.createPlanEx(plan.getId(), plan.getName(), plan.isCheckStatus(), plan.getGoal());
+                planExList.add(planEx);
+                planDate.put(convertedDate, planExList);
+            }
+        }
+        return planDate;
     }
 
     /**
