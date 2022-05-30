@@ -13,7 +13,7 @@ public interface PlanRepository {
     Plan save(Plan plan);
     Optional<Plan> findById(Long id);
     List<Plan> findByGoal(Goal goal);
-    List<Plan> findByDate(LocalDateTime date);
+    List<Plan> findByDate(int year, int month);
     List<Plan> findAll();
     int deleteById(Long id);
 
