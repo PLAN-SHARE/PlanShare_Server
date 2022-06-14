@@ -6,6 +6,7 @@ import planshare.server.planshare.domain.Goal;
 import planshare.server.planshare.domain.Member;
 import planshare.server.planshare.domain.Plan;
 import planshare.server.planshare.goal.repository.GoalRepository;
+import planshare.server.planshare.plan.dto.PlanDate;
 import planshare.server.planshare.plan.dto.PlanEx;
 import planshare.server.planshare.plan.dto.PlanForm;
 import planshare.server.planshare.plan.repository.PlanRepository;
@@ -84,13 +85,13 @@ public class PlanService {
      * select plan list by date
      * 일별로 묶어서 반환
      */
-    public Map<String, List<PlanEx>> findPlanByDate(CustomUserDetailsVO userDetailsVO, Long memberId, int year, int month){
+    public List<PlanDate> findPlanByDate(CustomUserDetailsVO userDetailsVO, Long memberId, int year, int month){
 
         Optional<Member> user = memberRepository.findByEmail(userDetailsVO.getUsername());  // 요청한 사용자
         Optional<Member> member = memberRepository.findById(memberId);                      // 요청된 멤버
         List<Goal> goalList = goalRepository.findByMember(member.get());
 
-        Map<String, List<PlanEx>> planDate = new HashMap<>();
+        Map<String, List<PlanEx>> planMap = new HashMap<>();
         List<Plan> planList = new ArrayList<>();
 
         for (Goal goal : goalList){
@@ -104,14 +105,21 @@ public class PlanService {
                 String convertedDate = localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
                 List<PlanEx> planExes = new ArrayList<>();
-                List<PlanEx> planExList = planDate.getOrDefault(convertedDate, planExes);
+                List<PlanEx> planExList = planMap.getOrDefault(convertedDate, planExes);
 
                 PlanEx planEx = PlanEx.createPlanEx(plan.getId(), plan.getName(), plan.isCheckStatus(), plan.getGoal());
                 planExList.add(planEx);
-                planDate.put(convertedDate, planExList);
+                planMap.put(convertedDate, planExList);
             }
         }
-        return planDate;
+
+        List<PlanDate> planDateList = new ArrayList<>();
+        for (String key : planMap.keySet()){
+            PlanDate planDate = PlanDate.createPlanDate(key, planMap.get(key));
+            planDateList.add(planDate);
+        }
+
+        return planDateList;
     }
 
     /**
