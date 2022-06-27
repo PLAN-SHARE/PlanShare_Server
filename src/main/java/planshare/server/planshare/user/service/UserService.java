@@ -18,6 +18,8 @@ import planshare.server.planshare.user.dto.KakaoUserInfo;
 import planshare.server.planshare.user.dto.SignUpDTO;
 import planshare.server.planshare.user.dto.TokenResponse;
 
+import java.util.Optional;
+
 
 @RequiredArgsConstructor
 @Service
@@ -48,12 +50,14 @@ public class UserService {
         String email = resp.getBody().getKakaoAccount().getEmail();
         Long kakaoId = resp.getBody().getId();
 
-        if (memberRepository.findByEmail(email).isPresent()) {
+        Optional<Member> member = memberRepository.findByEmail(email);
+
+        if (member.isPresent()) {
             String jwt = jwtUtil.createJWT(resp.getBody().getId(), resp.getBody().getKakaoAccount().getEmail());
-            return new JWTDTO(kakaoId, email, jwt);
+            return new JWTDTO(kakaoId, email, jwt, member.get().getId());
         }
 
-        return new JWTDTO(kakaoId, email, null);
+        return new JWTDTO(kakaoId, email, null, null);
     }
 
     public String saveMember(SignUpDTO signUpDTO) {

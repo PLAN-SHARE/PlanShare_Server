@@ -10,10 +10,12 @@ public class JWTDTO {
     private final Long kakaoId;
     private final String email;
     private final String JWT;
+    private final Long userId;
 
-    public JWTDTO(Long kakaoId, String email, String JWT) {
+    public JWTDTO(Long kakaoId, String email, String JWT,Long userId) {
         this.JWT = JWT;
         this.kakaoId = kakaoId;
         this.email = email;
+        this.userId = userId;
     }
 }
